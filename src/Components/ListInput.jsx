@@ -1,6 +1,6 @@
 import React from 'react';
 import { DestinationDropdown } from './DestinationDropdown';
-const ListInput = ({ handleNewPerson }) => {
+const ListInput = ({ handleNewPerson, handleStateReset }) => {
   const [firstName, setFirstName] = React.useState();
   const [lastName, setLastName] = React.useState();
   const [showError, setShowError] = React.useState(false);
@@ -8,27 +8,30 @@ const ListInput = ({ handleNewPerson }) => {
     firstName: '',
     lastName: '',
     vacationPreference: '',
+    vacationLocation: '',
     meetingDate: '',
   });
+
+
 
   const [validationErrors, setValidationErrors] = React.useState({
     firstName: '',
     lastName: '',
     vacationPreference: '',
+    vacationLocation: '',
     meetingDate: '',
   });
 
   const hanldFormValidation = (formData) => {
     // const tempValidationErrors = { ...validationErrors};
-    const tempValidationErrors = {
-      firstName: '',
-      lastName: '',
-      vacationPreference: '',
-      meetingDate: '',
-    };
+    const tempValidationErrors = { ...validationErrors };
+    let isError = false;
     Object.keys(formData).forEach((key) => {
       if (formData[key] === '') {
         tempValidationErrors[key] = 'Field is required';
+        isError = true;
+      } else {
+        tempValidationErrors[key] = '';
       }
       if (key === 'meetingDate') {
         // do custommeeting date validation
@@ -36,9 +39,12 @@ const ListInput = ({ handleNewPerson }) => {
     });
     console.log(tempValidationErrors);
     setValidationErrors(tempValidationErrors);
-    handleNewPerson(formData);
+    !isError && handleNewPerson(formData);
+    !isError && handleStateReset(setFormData);
   };
 
+
+  console.log(formData);
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', maxWidth: '250px' }}
@@ -47,7 +53,7 @@ const ListInput = ({ handleNewPerson }) => {
       <label htmlFor="first-name">First Name</label>
       <input
         id="first-name"
-        value={firstName}
+        value={formData.firstName}
         onChange={(e) => {
           setFormData({ ...formData, firstName: e.target.value });
         }}
@@ -103,6 +109,11 @@ const ListInput = ({ handleNewPerson }) => {
         {validationErrors.vacationPreference}
       </span>
       <span style={{ margin: '5px' }} />
+
+      <DestinationDropdown formData={formData} setFormData={setFormData} />
+      <span style={{ color: 'red' }}>{validationErrors.vacationLocation}</span>
+      <span style={{ margin: '5px' }} />
+
       <label>Availability for appointment within the next seven days</label>
       <input
         type="date"
@@ -114,10 +125,9 @@ const ListInput = ({ handleNewPerson }) => {
           });
         }}
       />
-      <DestinationDropdown />
       <span style={{ color: 'red' }}>{validationErrors.meetingDate}</span>
       <span style={{ margin: '5px' }} />
-      <button onClick={() => hanldFormValidation(formData)}>
+      <button className="btn btn-success" onClick={() => hanldFormValidation(formData)}>
         Add Client Appointment
       </button>
     </div>

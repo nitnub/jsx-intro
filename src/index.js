@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-
+import { DarkModeProvider } from './Contexts/DarkModeContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <App />
+  <DarkModeProvider>
+    <App />
+  </DarkModeProvider>
 );
-

@@ -45,7 +45,7 @@ const reducer = (state, action) => {
   }
 };
 
-export const DestinationDropdown = () => {
+export const DestinationDropdown = ({ formData, setFormData }) => {
   const [state, dispatch] = useReducer(reducer, initialState); // takes the function we created above.
 
   useEffect(() => {
@@ -71,10 +71,10 @@ export const DestinationDropdown = () => {
 
   return (
     <>
-      // labels let the screen reader associate the right label with the right
-      input
+     {/* labels let the screen reader associate the right label with the right
+      input */}
       <label htmlFor="destination-search">Search for a destination</label>
-      <input
+      <input 
         name="destination-search"
         value={state.locationSearch}
         type="text"
@@ -86,6 +86,7 @@ export const DestinationDropdown = () => {
         }
       />
       <button
+        className="btn btn-primary"
         onClick={() =>
           dispatch({
             type: 'UPDATE_SEARCH',
@@ -101,7 +102,16 @@ export const DestinationDropdown = () => {
       {state.loading ? (
         'Loading...'
       ) : (
-        <select disabled={!state.places.length > 0} name="destination-dropdown">
+        <select 
+        className='form-select form-select-sm'
+        value={formData.vacationLocation}
+        onChange={(e) => setFormData({
+          ...formData,
+          vacationLocation: e.target.value,
+        })}
+
+        disabled={!state.places.length > 0} name="destination-dropdown">
+          <option value='empty-selection'>Plesae Select a Location</option>
           {state.places?.length > 0 &&
             state.places.map((place) => {
               return (

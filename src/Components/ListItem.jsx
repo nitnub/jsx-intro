@@ -1,13 +1,14 @@
-const ListItem = ({ person }) => {
-    const { firstName, lastName, beachOrMountains } = person;
+const ListItem = ({ person, handleRemoveAppointment }) => {
+    const { id, firstName, lastName, vacationPreference } = person;
     return(
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <img
-                alt={beachOrMountains === 'Beach' ? 'beach' : 'mountains'}
+                alt={vacationPreference === 'Beach' ? 'beach' : 'mountains'}
                 height='46px'
-                src={beachOrMountains === 'Beach' ? 'beach.svg' : 'mountain.svg'}
+                src={vacationPreference === 'Beach' ? 'beach.svg' : 'mountain.svg'}
             />
             <h1>{firstName} {lastName}</h1>
+            <button className="btn btn-danger" onClick={() => handleRemoveAppointment(id)}>Remove</button>
         </div>
     )
 }
